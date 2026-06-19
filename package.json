@@ -1,0 +1,30 @@
+{
+  "name": "babylon-lite-playground",
+  "version": "0.1.1",
+  "description": "Browser playground for Babylon Lite scenes, snippets, uploaded assets, and ZIP export/import.",
+  "private": true,
+  "author": {
+    "name": "Andrei Stepanov",
+    "email": "eldinor@gmail.com",
+    "url": "https://babylonpress.org/"
+  },
+  "homepage": "https://babylonpress.org/",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc && vite build",
+    "preview": "vite preview --host 0.0.0.0"
+  },
+  "dependencies": {
+    "@babylonjs/lite": "1.1.0",
+    "jszip": "3.10.1",
+    "lz-string": "1.5.0",
+    "monaco-editor": "0.55.1"
+  },
+  "devDependencies": {
+    "@webgpu/types": "0.1.70",
+    "typescript": "6.0.3",
+    "vite": "8.0.16"
+  }
+}

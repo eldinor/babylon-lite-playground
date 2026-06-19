@@ -1,0 +1,320 @@
+:root {
+  color-scheme: dark;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #0f1216;
+  color: #e7edf4;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+button,
+select,
+input,
+.toolbar-link {
+  font: inherit;
+}
+
+button,
+select,
+.file-button,
+.toolbar-link {
+  min-height: 34px;
+  border: 1px solid #343c47;
+  border-radius: 6px;
+  background: #1a2028;
+  color: #e7edf4;
+}
+
+button,
+.file-button,
+.toolbar-link {
+  padding: 0 12px;
+  cursor: pointer;
+}
+
+.toolbar-link {
+  display: inline-flex;
+  align-items: center;
+  color: #e7edf4;
+  text-decoration: none;
+}
+
+button:hover,
+.file-button:hover,
+select:hover,
+.toolbar-link:hover {
+  border-color: #596575;
+  background: #222a35;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+button:disabled:hover {
+  border-color: #343c47;
+  background: #1a2028;
+}
+
+button.primary {
+  border-color: #4ea1ff;
+  background: #1476df;
+  color: white;
+  font-weight: 700;
+}
+
+.shell {
+  height: 100%;
+  min-width: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) 190px;
+  background: #0f1216;
+}
+
+.toolbar {
+  min-height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 14px;
+  border-bottom: 1px solid #252b34;
+  background: #151a21;
+}
+
+.brand {
+  min-width: 230px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.mark {
+  width: 40px;
+ 
+  display: block;
+  object-fit: contain;
+}
+
+.brand h1,
+.panel-header h2 {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+.app-version {
+  color: #9aa7b7;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.brand p {
+  margin: 3px 0 0;
+  color: #92a0b1;
+  font-size: 12px;
+}
+
+.toolbar-actions {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+#snippetSelect {
+  width: min(260px, 26vw);
+  padding: 0 10px;
+}
+
+.workspace {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(360px, 48%) minmax(360px, 1fr);
+}
+
+.editor-pane,
+.preview-pane {
+  min-width: 0;
+  min-height: 0;
+}
+
+.editor-pane {
+  border-right: 1px solid #252b34;
+}
+
+.editor-host,
+iframe {
+  width: 100%;
+  height: 100%;
+}
+
+iframe {
+  display: block;
+  border: 0;
+  background: #11151b;
+}
+
+.bottom-pane {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(260px, 34%) minmax(0, 1fr);
+  border-top: 1px solid #252b34;
+  background: #131820;
+}
+
+.asset-panel,
+.console-panel {
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.asset-panel {
+  border-right: 1px solid #252b34;
+}
+
+.panel-header {
+  min-height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  border-bottom: 1px solid #252b34;
+}
+
+.asset-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.file-button {
+  display: inline-flex;
+  align-items: center;
+}
+
+.file-button input {
+  display: none;
+}
+
+.asset-list {
+  margin: 0;
+  padding: 8px 12px;
+  list-style: none;
+  overflow: auto;
+}
+
+.asset-list li {
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: #c7d0dc;
+  font-size: 12px;
+  border-radius: 6px;
+  padding: 0 0 0 8px;
+  cursor: pointer;
+}
+
+.asset-list li.selected {
+  background: #1e2c3b;
+  color: #eef6ff;
+}
+
+.asset-list li:focus-visible {
+  outline: 2px solid #4ea1ff;
+  outline-offset: 2px;
+}
+
+.asset-list span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.asset-list button {
+  min-height: 28px;
+  padding: 0 8px;
+  font-size: 12px;
+}
+
+.empty-assets {
+  color: #748091;
+}
+
+.console-output {
+  overflow: auto;
+  padding: 10px 12px 14px;
+  font-family: "Cascadia Code", Consolas, "Liberation Mono", monospace;
+  font-size: 12px;
+  line-height: 1.45;
+  background: #0d1117;
+}
+
+.console-line {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: #d8dee9;
+}
+
+.console-line.warn {
+  color: #ffd166;
+}
+
+.console-line.error {
+  color: #ff7a8a;
+}
+
+@media (max-width: 900px) {
+  .shell {
+    grid-template-rows: auto minmax(0, 1fr) 230px;
+  }
+
+  .toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .toolbar-actions {
+    justify-content: flex-start;
+  }
+
+  #snippetSelect {
+    width: 100%;
+    flex: 1 1 100%;
+  }
+
+  .workspace,
+  .bottom-pane {
+    grid-template-columns: 1fr;
+  }
+
+  .workspace {
+    grid-template-rows: minmax(260px, 1fr) minmax(260px, 1fr);
+  }
+
+  .editor-pane,
+  .asset-panel {
+    border-right: 0;
+    border-bottom: 1px solid #252b34;
+  }
+}

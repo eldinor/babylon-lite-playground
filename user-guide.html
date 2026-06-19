@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="https://raw.githubusercontent.com/eldinor/ifc-babylon/refs/heads/main/public/bplogo.svg" />
+    <title>Babylon Lite Playground User Guide</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #0f1216;
+        color: #e7edf4;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background: #0f1216;
+      }
+
+      a {
+        color: #72b7ff;
+      }
+
+      code,
+      pre {
+        font-family: "Cascadia Code", Consolas, "Liberation Mono", monospace;
+      }
+
+      pre {
+        overflow: auto;
+        padding: 14px;
+        border: 1px solid #26303c;
+        border-radius: 8px;
+        background: #0b0f15;
+        color: #dce7f3;
+        line-height: 1.5;
+      }
+
+      code {
+        color: #dce7f3;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 14px 0 24px;
+        overflow: hidden;
+        border: 1px solid #26303c;
+        border-radius: 8px;
+      }
+
+      th,
+      td {
+        padding: 10px 12px;
+        border-bottom: 1px solid #26303c;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        background: #18202a;
+        color: #f3f8ff;
+        font-size: 13px;
+      }
+
+      td {
+        color: #c8d3df;
+      }
+
+      tr:last-child td {
+        border-bottom: 0;
+      }
+
+      .layout {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 270px minmax(0, 1fr);
+      }
+
+      .sidebar {
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow: auto;
+        padding: 22px 18px;
+        border-right: 1px solid #26303c;
+        background: #141a22;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 24px;
+      }
+
+      .brand img {
+        width: 34px;
+        height: 34px;
+        object-fit: contain;
+      }
+
+      .brand strong {
+        display: block;
+        font-size: 14px;
+        line-height: 1.25;
+      }
+
+      .brand span {
+        display: block;
+        margin-top: 2px;
+        color: #94a3b5;
+        font-size: 12px;
+      }
+
+      .nav {
+        display: grid;
+        gap: 4px;
+      }
+
+      .nav a {
+        display: block;
+        padding: 8px 10px;
+        border-radius: 6px;
+        color: #b9c6d5;
+        text-decoration: none;
+        font-size: 13px;
+      }
+
+      .nav a:hover {
+        background: #1d2732;
+        color: #ffffff;
+      }
+
+      .content {
+        max-width: 980px;
+        padding: 42px 44px 64px;
+      }
+
+      .hero {
+        margin-bottom: 34px;
+      }
+
+      .hero h1 {
+        margin: 0 0 10px;
+        font-size: clamp(32px, 5vw, 52px);
+        line-height: 1.03;
+        letter-spacing: 0;
+      }
+
+      .hero p {
+        max-width: 760px;
+        margin: 0;
+        color: #b8c5d4;
+        font-size: 17px;
+        line-height: 1.6;
+      }
+
+      section {
+        padding-top: 12px;
+        margin-top: 18px;
+      }
+
+      h2 {
+        margin: 28px 0 10px;
+        font-size: 25px;
+        line-height: 1.25;
+      }
+
+      h3 {
+        margin: 24px 0 8px;
+        font-size: 18px;
+      }
+
+      p,
+      li {
+        color: #c8d3df;
+        line-height: 1.65;
+      }
+
+      ul,
+      ol {
+        padding-left: 22px;
+      }
+
+      .callout {
+        margin: 18px 0;
+        padding: 14px 16px;
+        border: 1px solid #2d4058;
+        border-radius: 8px;
+        background: #121b27;
+        color: #d8e8f8;
+      }
+
+      .quick-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        margin: 20px 0 28px;
+      }
+
+      .quick-card {
+        padding: 14px;
+        border: 1px solid #26303c;
+        border-radius: 8px;
+        background: #141b24;
+      }
+
+      .quick-card strong {
+        display: block;
+        margin-bottom: 4px;
+        color: #ffffff;
+      }
+
+      .quick-card span {
+        color: #aebdca;
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      @media (max-width: 860px) {
+        .layout {
+          grid-template-columns: 1fr;
+        }
+
+        .sidebar {
+          position: static;
+          height: auto;
+        }
+
+        .nav {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .content {
+          padding: 28px 20px 52px;
+        }
+
+        .quick-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="brand">
+          <img src="https://raw.githubusercontent.com/eldinor/ifc-babylon/refs/heads/main/public/bplogo.svg" alt="" />
+          <div>
+            <strong>Babylon Lite Playground</strong>
+            <span>User Guide</span>
+          </div>
+        </div>
+        <nav class="nav" aria-label="Guide sections">
+          <a href="#before-use">Before Use</a>
+          <a href="#interface">Interface</a>
+          <a href="#scene">Scene Code</a>
+          <a href="#imports">Public API</a>
+          <a href="#camera">Camera</a>
+          <a href="#assets">Assets</a>
+          <a href="#snippets">Snippets</a>
+          <a href="#sharing">Sharing</a>
+          <a href="#zip-export">ZIP Export</a>
+          <a href="#console">Console</a>
+          <a href="#troubleshooting">Troubleshooting</a>
+        </nav>
+      </aside>
+
+      <main class="content">
+        <div class="hero">
+          <h1>Playground User Guide</h1>
+          <p>
+            This guide explains how to use the Babylon Lite Playground, write scenes with the public
+            <code>@babylonjs/lite</code> API, upload assets, insert generated code, save snippets, and share examples.
+          </p>
+        </div>
+
+        <div class="quick-grid">
+          <div class="quick-card">
+            <strong>Write normal module code</strong>
+            <span>Import from <code>@babylonjs/lite</code> just like in a local project.</span>
+          </div>
+          <div class="quick-card">
+            <strong>Use the preview canvas</strong>
+            <span>The runner creates <code>#renderCanvas</code> before your scene runs.</span>
+          </div>
+          <div class="quick-card">
+            <strong>Upload and insert assets</strong>
+            <span>Select an uploaded asset and press Insert to generate loader code.</span>
+          </div>
+        </div>
+
+        <section id="before-use">
+          <div class="callout">
+            Babylon Lite requires WebGPU. Use a current Chromium-based browser with WebGPU enabled.
+            Browser support details are available at
+            <a href="https://caniuse.com/webgpu" target="_blank" rel="noreferrer">caniuse.com/webgpu</a>.
+          </div>
+        </section>
+
+        <section id="interface">
+          <h2>Interface Overview</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Area</th>
+                <th>What It Does</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Toolbar</td>
+                <td>Runs scenes, manages snippets, resets code, and copies share URLs.</td>
+              </tr>
+              <tr>
+                <td>Editor</td>
+                <td>Monaco editor for scene code. It has completions from the installed Babylon Lite type declarations.</td>
+              </tr>
+              <tr>
+                <td>Preview</td>
+                <td>Sandboxed iframe with a fresh canvas for each run.</td>
+              </tr>
+              <tr>
+                <td>Assets</td>
+                <td>Upload files, select an asset, and insert generated code.</td>
+              </tr>
+              <tr>
+                <td>Console</td>
+                <td>Shows logs, warnings, runtime errors, and unhandled promise rejections.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Toolbar Buttons</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Button</th>
+                <th>Use</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Run</td>
+                <td>Runs the current editor source in a newly recreated preview iframe.</td>
+              </tr>
+              <tr>
+                <td>Format</td>
+                <td>Formats the current editor source with Monaco's built-in document formatter.</td>
+              </tr>
+              <tr>
+                <td>Help</td>
+                <td>Opens this user guide in a separate tab.</td>
+              </tr>
+              <tr>
+                <td>Reset</td>
+                <td>Restores the current snippet to its last saved version.</td>
+              </tr>
+              <tr>
+                <td>Share</td>
+                <td>Copies a URL with compressed source code in the hash.</td>
+              </tr>
+              <tr>
+                <td>Export ZIP</td>
+                <td>Downloads the current source, share URL text file, and uploaded assets in one ZIP.</td>
+              </tr>
+              <tr>
+                <td>Import ZIP</td>
+                <td>Opens an exported ZIP as a new snippet and reloads its uploaded assets.</td>
+              </tr>
+              <tr>
+                <td>New, Save, Duplicate, Rename, Delete</td>
+                <td>Manage local snippets stored in browser <code>localStorage</code>.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="scene">
+          <h2>Write Scene Code</h2>
+          <p>
+            A scene is a browser ES module. It must export a zero-argument <code>createScene</code> function.
+            The playground creates a canvas before importing your code.
+          </p>
+          <pre><code>import {
+  addToScene,
+  attachControl,
+  createArcRotateCamera,
+  createBox,
+  createEngine,
+  createHemisphericLight,
+  createSceneContext,
+  createStandardMaterial,
+  registerScene,
+  startEngine,
+} from "@babylonjs/lite";
+
+export async function createScene() {
+  const canvas = document.querySelector("#renderCanvas");
+  const engine = await createEngine(canvas);
+  const scene = createSceneContext(engine);
+
+  const camera = createArcRotateCamera(Math.PI / 4, Math.PI / 3, 6, { x: 0, y: 0.8, z: 0 });
+  attachControl(camera, canvas, scene);
+  scene.camera = camera;
+  scene.clearColor = { r: 0.04, g: 0.055, b: 0.075, a: 1 };
+
+  addToScene(scene, createHemisphericLight([0, 1, 0], 0.8));
+
+  const material = createStandardMaterial();
+  material.diffuseColor = [0.2, 0.55, 1];
+
+  const box = createBox(engine, 1.5);
+  box.material = material;
+  addToScene(scene, box);
+
+  await registerScene(scene);
+  await startEngine(engine);
+}</code></pre>
+
+          <div class="callout">
+            The editor accepts TypeScript-style completions, but preview code runs as raw browser JavaScript. Do not use TypeScript-only syntax like <code>api: any</code>.
+          </div>
+        </section>
+
+        <section id="imports">
+          <h2>Use The Public Babylon Lite API</h2>
+          <p>The playground uses an import map so snippets can import the package by name:</p>
+          <pre><code>import * as Lite from "@babylonjs/lite";</code></pre>
+          <p>or import only what you need:</p>
+          <pre><code>import { createEngine, createSceneContext, loadGltf } from "@babylonjs/lite";</code></pre>
+          <p>
+            The playground does not expose a custom API object. If a function is publicly exported by the installed
+            <code>@babylonjs/lite</code> package, import it normally.
+          </p>
+        </section>
+
+        <section id="camera">
+          <h2>Camera And Mouse Controls</h2>
+          <p>Create an arc rotate camera, assign it to the scene, and attach pointer controls:</p>
+          <pre><code>const camera = createArcRotateCamera(Math.PI / 4, Math.PI / 3, 6, { x: 0, y: 1, z: 0 });
+attachControl(camera, canvas, scene);
+scene.camera = camera;</code></pre>
+          <p>
+            Passing <code>scene</code> to <code>attachControl</code> is important. Babylon Lite applies orbit inertia from the scene render loop.
+          </p>
+        </section>
+
+        <section id="assets">
+          <h2>Upload And Insert Assets</h2>
+          <p>
+            Use the asset panel to upload files. Files are converted to data URLs for the sandboxed iframe. The original
+            filename is preserved as a URL fragment, so <code>.glb</code> files are detected correctly.
+          </p>
+          <ol>
+            <li>Click <strong>Upload</strong> and choose one or more files.</li>
+            <li>Click an asset row to select it.</li>
+            <li>Place your editor cursor inside <code>createScene()</code>, or let Insert find the scene setup line.</li>
+            <li>Click <strong>Insert</strong>.</li>
+          </ol>
+          <p>
+            Insert looks for <code>const scene = createSceneContext(...)</code> or
+            <code>const scene = Lite.createSceneContext(...)</code> and places generated code after that line.
+          </p>
+
+          <h3>Inserted Code By File Type</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>File</th>
+                <th>Generated Code</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>.glb</code>, <code>.gltf</code></td>
+                <td>Uses <code>loadGltf(engine, url)</code> and <code>addToScene(scene, container)</code>.</td>
+              </tr>
+              <tr>
+                <td>Image files</td>
+                <td>Uses <code>loadTexture2D(engine, url)</code>.</td>
+              </tr>
+              <tr>
+                <td>Other files</td>
+                <td>Inserts a URL lookup only.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Manual GLB Loading</h3>
+          <p>Add the import at the top of the module:</p>
+          <pre><code>import { addToScene, loadGltf } from "@babylonjs/lite";</code></pre>
+          <p>Then place this inside <code>createScene()</code> after <code>engine</code> and <code>scene</code> are created:</p>
+          <pre><code>const url = window.playgroundAssets["model.glb"];
+
+if (url) {
+  const container = await loadGltf(engine, url);
+  addToScene(scene, container);
+}</code></pre>
+          <p>Uploaded assets are session-local and are not included in share URLs.</p>
+        </section>
+
+        <section id="snippets">
+          <h2>Saved Snippets</h2>
+          <p>Snippets are stored in browser <code>localStorage</code>. No backend is used.</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Control</th>
+                <th>Behavior</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Snippet select</td>
+                <td>Switches between saved snippets.</td>
+              </tr>
+              <tr>
+                <td>Save</td>
+                <td>Saves current editor source into the selected snippet.</td>
+              </tr>
+              <tr>
+                <td>Duplicate</td>
+                <td>Creates a copy from the current editor source.</td>
+              </tr>
+              <tr>
+                <td>Delete</td>
+                <td>Removes the selected snippet after confirmation.</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="sharing">
+          <h2>Share URLs</h2>
+          <p>
+            The Share button compresses the current source with <code>lz-string</code> and stores it in the URL hash.
+            This is good for small and medium snippets.
+          </p>
+          <div class="callout">
+            Uploaded assets are not included in share URLs. A recipient must upload the same files locally.
+          </div>
+        </section>
+
+        <section id="zip-export">
+          <h2>ZIP Export</h2>
+          <p>
+            Use <strong>Export ZIP</strong> when you want to save the current playground together with uploaded assets.
+            This works without a database or backend.
+          </p>
+          <p>The downloaded ZIP contains:</p>
+          <pre><code>playground.js
+share-url.txt
+assets/
+  uploaded-file.ext</code></pre>
+          <table>
+            <thead>
+              <tr>
+                <th>File</th>
+                <th>Contents</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>playground.js</code></td>
+                <td>The plain source code currently in the editor.</td>
+              </tr>
+              <tr>
+                <td><code>share-url.txt</code></td>
+                <td>The playground name, uploaded asset list, current share URL, and a note that uploaded assets are stored separately in the ZIP.</td>
+              </tr>
+              <tr>
+                <td><code>assets/</code></td>
+                <td>Every uploaded asset from the current browser session.</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            Use <strong>Import ZIP</strong> to restore an exported playground. The app reads <code>playground.js</code>,
+            creates a new snippet using the name from <code>share-url.txt</code>, and loads every file from
+            <code>assets/</code> back into the asset panel.
+          </p>
+          <div class="callout">
+            Imported assets are still browser-session assets. Save another ZIP if you need to keep the restored
+            playground and its files together again.
+          </div>
+        </section>
+
+        <section id="console">
+          <h2>Console And Errors</h2>
+          <p>The preview captures:</p>
+          <ul>
+            <li><code>console.log</code></li>
+            <li><code>console.warn</code></li>
+            <li><code>console.error</code></li>
+            <li><code>window.error</code></li>
+            <li><code>window.unhandledrejection</code></li>
+          </ul>
+          <p>Use the console panel to debug syntax errors, missing imports, missing assets, and runtime failures.</p>
+        </section>
+
+        <section id="troubleshooting">
+          <h2>Troubleshooting</h2>
+          <h3>Mouse Controls Do Not React</h3>
+          <p>Use <code>attachControl(camera, canvas, scene)</code>, then assign <code>scene.camera = camera</code>.</p>
+
+          <h3><code>ReferenceError: engine is not defined</code></h3>
+          <p>Asset code was inserted outside the part of <code>createScene()</code> where <code>engine</code> exists. Insert usually places code after <code>createSceneContext</code>; otherwise move the generated block after your engine and scene setup.</p>
+
+          <h3><code>SyntaxError: Unexpected token ':'</code></h3>
+          <p>The preview runs JavaScript modules. Remove TypeScript annotations from runnable code.</p>
+
+          <h3>WebGPU Is Unavailable</h3>
+          <p>Use a current Chromium-based browser with WebGPU enabled.</p>
+
+          <h3>Share URL Does Not Restore Assets</h3>
+          <p>This is expected. Share URLs include source code only.</p>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

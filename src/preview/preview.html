@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Preview</title>
+    <script type="importmap">
+      {
+        "imports": {
+          "@babylonjs/lite": "/src/preview/babylon-lite.ts"
+        }
+      }
+    </script>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: #121418;
+      }
+
+      canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+      }
+
+      .preview-message {
+        box-sizing: border-box;
+        width: 100%;
+        min-height: 100%;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        color: #d8dee9;
+        font: 14px/1.5 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="preview-message">Run a scene to start the preview.</div>
+    <script type="module" src="./runner.ts"></script>
+  </body>
+</html>
