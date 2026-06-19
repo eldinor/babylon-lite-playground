@@ -4,6 +4,7 @@ import TsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker"
 import packageJson from "../package.json";
 import liteTypes from "../node_modules/@babylonjs/lite/index.d.ts?raw";
 import defaultSource from "./default-scene.ts?raw";
+import previewRunnerUrl from "./preview/runner.js?url";
 import "./style.css";
 import { createAssetStore, formatFileSize } from "./assets";
 import { createPlaygroundZip, readPlaygroundZip } from "./export-zip";
@@ -39,6 +40,7 @@ app.innerHTML = `
       </div>
       <div class="toolbar-actions">
         <button id="formatCode" type="button" title="Format current code">Format</button>
+        <a class="toolbar-link" href="https://doc.babylonjs.com/lite/typedoc" target="_blank" rel="noreferrer" title="Open Babylon Lite API documentation">API</a>
         <a class="toolbar-link" href="/user-guide.html" target="_blank" rel="noreferrer" title="Open user guide">Help</a>
         <select id="snippetSelect" aria-label="Snippet"></select>
         <button id="newSnippet" type="button" title="New snippet">New</button>
@@ -46,6 +48,7 @@ app.innerHTML = `
         <button id="duplicateSnippet" type="button" title="Duplicate snippet">Duplicate</button>
         <button id="renameSnippet" type="button" title="Rename snippet">Rename</button>
         <button id="deleteSnippet" type="button" title="Delete snippet">Delete</button>
+        <button id="deleteAllSnippets" type="button" title="Delete all snippets">Delete All</button>
         <label class="file-button" title="Import playground ZIP">
           Import ZIP
           <input id="importZipInput" type="file" accept=".zip,application/zip" />
@@ -61,7 +64,7 @@ app.innerHTML = `
         <div id="editor" class="editor-host"></div>
       </div>
       <div class="preview-pane">
-        <iframe id="preview" sandbox="allow-scripts" src="/src/preview/preview.html" title="Scene preview"></iframe>
+        <iframe id="preview" sandbox="allow-scripts" title="Scene preview"></iframe>
       </div>
     </section>
     <aside class="bottom-pane">
@@ -86,6 +89,37 @@ app.innerHTML = `
         <div id="consoleOutput" class="console-output" aria-live="polite"></div>
       </section>
     </aside>
+    <a
+      class="corner-link corner-link-site"
+      href="https://babylonpress.org/"
+      target="_blank"
+      rel="noreferrer"
+      title="Created by BabylonPress"
+      aria-label="Created by BabylonPress"
+    >
+      <img
+        class="corner-logo"
+        src="https://raw.githubusercontent.com/eldinor/ifc-babylon/refs/heads/main/public/bplogo.svg"
+        alt=""
+      />
+      <span class="sr-only">BabylonPress</span>
+    </a>
+    <a
+      class="corner-link corner-link-github"
+      href="https://github.com/eldinor/babylon-lite-playground"
+      target="_blank"
+      rel="noreferrer"
+      title="Open GitHub repository"
+      aria-label="Open eldinor/babylon-lite-playground on GitHub"
+    >
+      <svg class="repo-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          fill="currentColor"
+          d="M12 0C5.37 0 0 5.5 0 12.28c0 5.42 3.44 10.02 8.2 11.65.6.11.82-.27.82-.59 0-.29-.01-1.06-.02-2.08-3.34.74-4.04-1.65-4.04-1.65-.55-1.42-1.34-1.8-1.34-1.8-1.09-.76.08-.74.08-.74 1.2.09 1.84 1.27 1.84 1.27 1.07 1.88 2.81 1.34 3.5 1.02.11-.79.42-1.34.76-1.64-2.66-.31-5.46-1.36-5.46-6.07 0-1.34.47-2.43 1.24-3.29-.12-.31-.54-1.56.12-3.25 0 0 1.01-.33 3.3 1.26A11.26 11.26 0 0 1 12 5.97c1.02.01 2.04.14 3 .41 2.29-1.59 3.3-1.26 3.3-1.26.66 1.69.24 2.94.12 3.25.77.86 1.24 1.95 1.24 3.29 0 4.72-2.8 5.75-5.47 6.06.43.38.81 1.13.81 2.28 0 1.65-.02 2.98-.02 3.39 0 .33.22.71.83.59A12.23 12.23 0 0 0 24 12.28C24 5.5 18.63 0 12 0Z"
+        />
+      </svg>
+      <span class="sr-only">eldinor/babylon-lite-playground</span>
+    </a>
   </main>
 `;
 
@@ -99,6 +133,7 @@ const saveSnippetButton = document.querySelector<HTMLButtonElement>("#saveSnippe
 const duplicateSnippetButton = document.querySelector<HTMLButtonElement>("#duplicateSnippet")!;
 const renameSnippetButton = document.querySelector<HTMLButtonElement>("#renameSnippet")!;
 const deleteSnippetButton = document.querySelector<HTMLButtonElement>("#deleteSnippet")!;
+const deleteAllSnippetsButton = document.querySelector<HTMLButtonElement>("#deleteAllSnippets")!;
 const exportZipButton = document.querySelector<HTMLButtonElement>("#exportZip")!;
 const importZipInput = document.querySelector<HTMLInputElement>("#importZipInput")!;
 const shareButton = document.querySelector<HTMLButtonElement>("#shareButton")!;
@@ -192,8 +227,70 @@ function clearConsole(): void {
 function recreatePreview(): Promise<void> {
   return new Promise((resolve) => {
     preview.addEventListener("load", () => resolve(), { once: true });
-    preview.src = "/src/preview/preview.html";
+    preview.srcdoc = createPreviewDocument();
   });
+}
+
+function createPreviewDocument(): string {
+  const liteUrl = toAbsoluteUrl(import.meta.env.DEV ? "/src/preview/babylon-lite-entry.js" : "/assets/babylon-lite-preview.js");
+  const runnerUrl = toAbsoluteUrl(previewRunnerUrl);
+
+  return `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Preview</title>
+    <script type="importmap">
+      {
+        "imports": {
+          "@babylonjs/lite": "${escapeHtml(liteUrl)}"
+        }
+      }
+    </script>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: #121418;
+      }
+
+      canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+      }
+
+      .preview-message {
+        box-sizing: border-box;
+        width: 100%;
+        min-height: 100%;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        color: #d8dee9;
+        font: 14px/1.5 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="preview-message">Run a scene to start the preview.</div>
+    <script type="module" src="${escapeHtml(runnerUrl)}"></script>
+  </body>
+</html>`;
+}
+
+function toAbsoluteUrl(url: string): string {
+  return new URL(url, window.location.href).href;
+}
+
+function escapeHtml(value: string): string {
+  return value.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
 }
 
 async function runScene(): Promise<void> {
@@ -529,6 +626,20 @@ deleteSnippetButton.addEventListener("click", () => {
   saveSnippets(snippets);
   editor.setValue(getSelectedSnippet()?.source ?? defaultSource);
   renderSnippets();
+});
+
+deleteAllSnippetsButton.addEventListener("click", () => {
+  if (!confirm("Delete all snippets and restore the default scene?")) {
+    return;
+  }
+
+  const snippet = createSnippet("Default Scene", defaultSource);
+  snippets.splice(0, snippets.length, snippet);
+  selectedSnippetId = snippet.id;
+  saveSnippets(snippets);
+  editor.setValue(snippet.source);
+  renderSnippets();
+  setStatus("Deleted all snippets");
 });
 
 shareButton.addEventListener("click", async () => {

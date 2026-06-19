@@ -8,7 +8,14 @@
     "email": "eldinor@gmail.com",
     "url": "https://babylonpress.org/"
   },
-  "homepage": "https://babylonpress.org/",
+  "homepage": "https://pg.babylonpress.org/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eldinor/babylon-lite-playground.git"
+  },
+  "bugs": {
+    "url": "https://github.com/eldinor/babylon-lite-playground/issues"
+  },
   "license": "Apache-2.0",
   "type": "module",
   "scripts": {
