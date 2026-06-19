@@ -19,6 +19,7 @@ export default defineConfig({
       preserveEntrySignatures: "strict",
       input: {
         app: resolve(__dirname, "index.html"),
+        guide: resolve(__dirname, "user-guide.html"),
         "babylon-lite-preview": resolve(__dirname, "src/preview/babylon-lite-entry.js"),
       },
       output: {
