@@ -291,7 +291,7 @@ The preview runs raw browser JavaScript modules. Remove TypeScript-only syntax f
 
 ### CORS errors in the preview iframe
 
-Restart the dev server after changing `vite.config.ts`. The dev server must send `Access-Control-Allow-Origin: *`.
+The preview iframe intentionally omits `allow-same-origin`. In production, the server must send `Access-Control-Allow-Origin: *` for built files under `/assets/` that can be imported from the sandboxed preview's opaque origin. The included `.htaccess` configures this for Apache.
 
 ### Share URL does not restore assets
 

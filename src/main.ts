@@ -32,7 +32,7 @@ app.innerHTML = `
   <main class="shell">
     <header class="toolbar">
       <div class="brand">
-        <img class="mark" src="https://raw.githubusercontent.com/eldinor/ifc-babylon/refs/heads/main/public/bplogo.svg" alt="" />
+        <img class="mark" src="/bplogo.svg" alt="" />
         <div>
           <h1>Babylon Lite Playground <span class="app-version">v${packageJson.version}</span></h1>
           <p id="statusText">Idle</p>
@@ -99,7 +99,7 @@ app.innerHTML = `
     >
       <img
         class="corner-logo"
-        src="https://raw.githubusercontent.com/eldinor/ifc-babylon/refs/heads/main/public/bplogo.svg"
+        src="/bplogo.svg"
         alt=""
       />
       <span class="sr-only">BabylonPress</span>
