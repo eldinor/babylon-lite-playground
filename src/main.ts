@@ -172,13 +172,6 @@ const editor = monaco.editor.create(editorHost, {
   padding: { top: 14, bottom: 14 },
 });
 
-// Quick hack, change later
-
-monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
-  diagnosticCodesToIgnore: [2792, 2307],
-});
-//
-
 const monacoTypescript = monaco.languages.typescript as any;
 
 monacoTypescript.typescriptDefaults.setCompilerOptions({
@@ -187,6 +180,12 @@ monacoTypescript.typescriptDefaults.setCompilerOptions({
   moduleResolution: monacoTypescript.ModuleResolutionKind.Bundler,
   allowNonTsExtensions: true,
 });
+
+// Quick hack, change later
+monacoTypescript.typescriptDefaults.setDiagnosticsOptions({
+  diagnosticCodesToIgnore: [2792],
+});
+//
 
 monacoTypescript.typescriptDefaults.addExtraLib(liteTypes, "file:///node_modules/@babylonjs/lite/index.d.ts");
 monacoTypescript.typescriptDefaults.addExtraLib(
