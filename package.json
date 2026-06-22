@@ -1,6 +1,6 @@
 {
   "name": "babylon-lite-playground",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Browser playground for Babylon Lite scenes, snippets, uploaded assets, and ZIP export/import.",
   "private": true,
   "author": {
@@ -24,7 +24,7 @@
     "preview": "vite preview --host 0.0.0.0"
   },
   "dependencies": {
-    "@babylonjs/lite": "1.1.0",
+    "@babylonjs/lite": "1.3.0",
     "jszip": "3.10.1",
     "lz-string": "1.5.0",
     "monaco-editor": "0.55.1"

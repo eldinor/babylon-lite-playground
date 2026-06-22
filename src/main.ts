@@ -12,6 +12,9 @@ import type { PlaygroundAsset, PreviewMessage, Snippet } from "./playground-type
 import { readSharePayload, encodeSharePayload } from "./share-url";
 import { createSnippet, loadSnippets, saveSnippets } from "./snippets";
 
+const appTitle = `Babylon Lite ${__BABYLON_LITE_VERSION__} Playground v${packageJson.version}`;
+document.title = appTitle;
+
 const app = document.querySelector<HTMLDivElement>("#app");
 
 if (!app) {
@@ -34,7 +37,7 @@ app.innerHTML = `
       <div class="brand">
         <img class="mark" src="/bplogo.svg" alt="" />
         <div>
-          <h1>Babylon Lite Playground <span class="app-version">v${packageJson.version}</span></h1>
+          <h1>Babylon Lite <span class="app-version lite-version">${__BABYLON_LITE_VERSION__}</span> Playground <span class="app-version">v${packageJson.version}</span></h1>
           <p id="statusText">Idle</p>
         </div>
       </div>

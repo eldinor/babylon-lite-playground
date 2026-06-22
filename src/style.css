@@ -121,6 +121,10 @@ button.primary {
   font-weight: 600;
 }
 
+.lite-version {
+  color: #4ea1ff;
+}
+
 .brand p {
   margin: 3px 0 0;
   color: #92a0b1;

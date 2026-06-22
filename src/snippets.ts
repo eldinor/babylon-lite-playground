@@ -45,9 +45,7 @@ function migrateSnippetSource(snippet: Snippet): Snippet {
 }
 
 function defaultDirectImportScene(): string {
-  return `// @ts-nocheck
-
-import {
+  return `import {
   addToScene,
   attachControl,
   createArcRotateCamera,
@@ -63,7 +61,11 @@ import {
 } from "@babylonjs/lite";
 
 export async function createScene() {
-  const canvas = document.querySelector("#renderCanvas");
+  const canvas = document.querySelector<HTMLCanvasElement>("#renderCanvas");
+  if (!canvas) {
+    throw new Error("Preview canvas #renderCanvas was not found.");
+  }
+
   const engine = await createEngine(canvas);
   const scene = createSceneContext(engine);
 
