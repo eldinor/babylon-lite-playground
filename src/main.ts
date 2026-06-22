@@ -172,6 +172,13 @@ const editor = monaco.editor.create(editorHost, {
   padding: { top: 14, bottom: 14 },
 });
 
+// Quick hack, change later
+
+monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+  diagnosticCodesToIgnore: [2792, 2307],
+});
+//
+
 const monacoTypescript = monaco.languages.typescript as any;
 
 monacoTypescript.typescriptDefaults.setCompilerOptions({
@@ -235,7 +242,9 @@ function recreatePreview(): Promise<void> {
 }
 
 function createPreviewDocument(): string {
-  const liteUrl = toAbsoluteUrl(import.meta.env.DEV ? "/src/preview/babylon-lite-entry.js" : "/assets/babylon-lite-preview.js");
+  const liteUrl = toAbsoluteUrl(
+    import.meta.env.DEV ? "/src/preview/babylon-lite-entry.js" : "/assets/babylon-lite-preview.js",
+  );
   const runnerUrl = toAbsoluteUrl(previewRunnerUrl);
 
   return `<!doctype html>
@@ -417,7 +426,9 @@ function insertSelectedAsset(): void {
     },
   ]);
   editor.focus();
-  setStatus(findSceneSetupInsertOffset(originalSource) ? `Inserted ${asset.name} after scene setup` : `Inserted ${asset.name}`);
+  setStatus(
+    findSceneSetupInsertOffset(originalSource) ? `Inserted ${asset.name} after scene setup` : `Inserted ${asset.name}`,
+  );
 }
 
 async function exportPlaygroundZip(): Promise<void> {
@@ -498,7 +509,11 @@ function createAssetInsert(asset: PlaygroundAsset): { imports: string[]; code: s
   };
 }
 
-function upsertBabylonLiteImports(source: string, imports: string[], cursorOffset: number): { source: string; offsetDelta: number } {
+function upsertBabylonLiteImports(
+  source: string,
+  imports: string[],
+  cursorOffset: number,
+): { source: string; offsetDelta: number } {
   const needed = Array.from(new Set(imports)).filter((name) => name.length > 0);
   if (needed.length === 0) {
     return { source, offsetDelta: 0 };

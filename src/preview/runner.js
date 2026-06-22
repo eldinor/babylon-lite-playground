@@ -58,7 +58,7 @@ async function runSource(message) {
     return;
   }
 
-  createCanvas();
+  const canvas = createCanvas();
   window.playgroundAssets = message.assets;
 
   let blobUrl = null;
@@ -75,7 +75,7 @@ async function runSource(message) {
       throw new Error('User module must export a function named "createScene".');
     }
 
-    await module.createScene();
+    await module.createScene(canvas);
 
     if (token === runToken) {
       post({ type: "status", value: "ready" });

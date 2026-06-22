@@ -1,6 +1,7 @@
 # Babylon Lite Playground static deployment for Apache.
 
 Options -Indexes
+DirectoryIndex index.html
 
 <IfModule mod_headers.c>
   # The preview iframe is sandboxed without allow-same-origin, so built assets
@@ -27,4 +28,7 @@ Options -Indexes
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^ index.html [L]
 </IfModule>

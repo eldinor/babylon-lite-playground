@@ -66,7 +66,7 @@ async function runSource(message: ParentMessage): Promise<void> {
     return;
   }
 
-  createCanvas();
+  const canvas = createCanvas();
   window.playgroundAssets = message.assets;
 
   let blobUrl: string | null = null;
@@ -74,7 +74,7 @@ async function runSource(message: ParentMessage): Promise<void> {
   try {
     blobUrl = URL.createObjectURL(new Blob([message.source], { type: "text/javascript" }));
     const module = (await import(/* @vite-ignore */ blobUrl)) as {
-      createScene?: () => Promise<void> | void;
+      createScene?: (canvas: HTMLCanvasElement) => Promise<void> | void;
     };
 
     if (token !== runToken) {
@@ -85,7 +85,7 @@ async function runSource(message: ParentMessage): Promise<void> {
       throw new Error('User module must export a function named "createScene".');
     }
 
-    await module.createScene();
+    await module.createScene(canvas);
 
     if (token === runToken) {
       post({ type: "status", value: "ready" });
