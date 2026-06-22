@@ -3,8 +3,8 @@ import EditorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker";
 import TsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker";
 import packageJson from "../package.json";
 import liteTypes from "../node_modules/@babylonjs/lite/index.d.ts?raw";
-import defaultSource from "./default-scene.ts?raw";
-import previewRunnerUrl from "./preview/runner.js?url";
+import defaultSource from "./default-scene.js?raw";
+import previewRunnerSource from "./preview/runner.js?raw";
 import "./style.css";
 import { createAssetStore, formatFileSize } from "./assets";
 import { createPlaygroundZip, readPlaygroundZip } from "./export-zip";
@@ -172,22 +172,23 @@ const editor = monaco.editor.create(editorHost, {
   padding: { top: 14, bottom: 14 },
 });
 
-const monacoTypescript = monaco.languages.typescript as any;
+const monacoTypescript = monaco.typescript;
+const liteModuleTypes = liteTypes
+  .replace(/^export declare /gm, "export ")
+  .replace(/^declare /gm, "")
+  .replace(/\nexport \{\s*\}\s*$/, "");
 
 monacoTypescript.typescriptDefaults.setCompilerOptions({
-  target: monacoTypescript.ScriptTarget.ES2022,
+  target: monacoTypescript.ScriptTarget.ESNext,
   module: monacoTypescript.ModuleKind.ESNext,
-  moduleResolution: monacoTypescript.ModuleResolutionKind.Bundler,
+  moduleResolution: monacoTypescript.ModuleResolutionKind.NodeJs,
   allowNonTsExtensions: true,
 });
 
-// Quick hack, change later
-monacoTypescript.typescriptDefaults.setDiagnosticsOptions({
-  diagnosticCodesToIgnore: [2792],
-});
-//
-
-monacoTypescript.typescriptDefaults.addExtraLib(liteTypes, "file:///node_modules/@babylonjs/lite/index.d.ts");
+monacoTypescript.typescriptDefaults.addExtraLib(
+  `declare module "@babylonjs/lite" {\n${liteModuleTypes}\n}`,
+  "file:///babylon-lite.d.ts",
+);
 monacoTypescript.typescriptDefaults.addExtraLib(
   `
 declare global {
@@ -244,7 +245,6 @@ function createPreviewDocument(): string {
   const liteUrl = toAbsoluteUrl(
     import.meta.env.DEV ? "/src/preview/babylon-lite-entry.js" : "/assets/babylon-lite-preview.js",
   );
-  const runnerUrl = toAbsoluteUrl(previewRunnerUrl);
 
   return `<!doctype html>
 <html lang="en">
@@ -291,7 +291,7 @@ function createPreviewDocument(): string {
   </head>
   <body>
     <div class="preview-message">Run a scene to start the preview.</div>
-    <script type="module" src="${escapeHtml(runnerUrl)}"></script>
+    <script type="module">${escapeScript(previewRunnerSource)}</script>
   </body>
 </html>`;
 }
@@ -302,6 +302,10 @@ function toAbsoluteUrl(url: string): string {
 
 function escapeHtml(value: string): string {
   return value.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+}
+
+function escapeScript(value: string): string {
+  return value.replace(/<\/script/gi, "<\\/script");
 }
 
 async function runScene(): Promise<void> {

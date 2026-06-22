@@ -75,8 +75,8 @@ import {
   startEngine,
 } from "@babylonjs/lite";
 
-export async function createScene() {
-  const canvas = document.querySelector("#renderCanvas");
+/** @param {HTMLCanvasElement} canvas */
+export async function createScene(canvas) {
   const engine = await createEngine(canvas);
   const scene = createSceneContext(engine);
 
@@ -161,8 +161,8 @@ import {
   startEngine,
 } from "@babylonjs/lite";
 
-export async function createScene() {
-  const canvas = document.querySelector("#renderCanvas");
+/** @param {HTMLCanvasElement} canvas */
+export async function createScene(canvas) {
   const engine = await createEngine(canvas);
   const scene = createSceneContext(engine);
 
@@ -268,7 +268,7 @@ vite.config.ts
 src/
   main.ts
   style.css
-  default-scene.ts
+  default-scene.js
   playground-types.ts
   snippets.ts
   assets.ts

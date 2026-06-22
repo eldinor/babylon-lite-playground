@@ -406,8 +406,8 @@
   startEngine,
 } from "@babylonjs/lite";
 
-export async function createScene() {
-  const canvas = document.querySelector("#renderCanvas");
+/** @param {HTMLCanvasElement} canvas */
+export async function createScene(canvas) {
   const engine = await createEngine(canvas);
   const scene = createSceneContext(engine);
 

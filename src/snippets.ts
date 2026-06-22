@@ -36,26 +36,28 @@ function migrateSnippetSource(snippet: Snippet): Snippet {
     snippet.source.includes("export async function createScene(api)") &&
     snippet.source.includes("Scene ready. Try changing the box color or size.");
 
-  const source = (
+  const source = migrateCanvasParameter(
     isOldDefaultScene
       ? defaultDirectImportScene()
       : snippet.source
           .replace("export async function createScene(api: any)", "export async function createScene(api)")
-          .replace(
-            `export async function createScene() {
-  const canvas = document.querySelector<HTMLCanvasElement>("#renderCanvas");
-  if (!canvas) {
-    throw new Error("Preview canvas #renderCanvas was not found.");
-  }
-`,
-            "export async function createScene(canvas: HTMLCanvasElement) {",
-          )
   ).replace(/^\/\/\s*@ts-nocheck\s*\r?\n(?:\r?\n)?/, "");
 
   return {
     ...snippet,
     source,
   };
+}
+
+function migrateCanvasParameter(source: string): string {
+  const typedCanvasParameter = "/** @param {HTMLCanvasElement} canvas */\nexport async function createScene(canvas) {\n";
+
+  return source
+    .replace(
+      /export async function createScene\(\) \{\r?\n\s*const canvas = document\.querySelector(?:<HTMLCanvasElement>)?\(["']#renderCanvas["']\);\r?\n(?:\s*if \(!canvas\) \{\r?\n\s*throw new Error\(["']Preview canvas #renderCanvas was not found\.["']\);\r?\n\s*\}\r?\n)?/,
+      typedCanvasParameter,
+    )
+    .replace("export async function createScene(canvas: HTMLCanvasElement) {", typedCanvasParameter.trimEnd());
 }
 
 function defaultDirectImportScene(): string {
@@ -74,7 +76,8 @@ function defaultDirectImportScene(): string {
   startEngine,
 } from "@babylonjs/lite";
 
-export async function createScene(canvas: HTMLCanvasElement) {
+/** @param {HTMLCanvasElement} canvas */
+export async function createScene(canvas) {
   const engine = await createEngine(canvas);
   const scene = createSceneContext(engine);
 
